@@ -29,7 +29,7 @@ export class UserService {
     const { username, password } = userLogin;
     const user: User = await this.userModel.findOne({ username: username });
     if (!user || !bcrypt.compareSync(password, user.password)) {
-      throw new HttpException('Wrong username or password', HttpStatus.UNAUTHORIZED)
+      throw new HttpException('Invalid username or password', HttpStatus.UNAUTHORIZED)
     }
     const jwt = await this.jwtService.signAsync({ id: user._id });
     return {token: jwt};

@@ -29,7 +29,11 @@ export class ProductService {
     return { message: "Update product succesful"};
   }
   async getProduct(): Promise<Product[]> {
-    return await this.productModel.find();
+    const products: Product[] = await this.productModel.find();
+    if(!products) {
+      throw new HttpException('No products found', HttpStatus.NO_CONTENT);
+    }
+    return products;
   }
   async deleteProduct(id: string): Promise<any> {
     const { deletedCount } = await this.productModel.deleteOne({_id: id})
