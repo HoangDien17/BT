@@ -1,4 +1,4 @@
-import { Body, Get } from '@nestjs/common';
+import { Body, Get, Delete } from '@nestjs/common';
 import { Post } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
@@ -21,5 +21,11 @@ export class OrderController {
   @UseGuards(new AuthGuard())
   async createOrder(@GetUser() user, @Body() orderDto: OrderDto) {
     return await this.orderService.createOrder(user.id, orderDto);
+  }
+
+  @Delete()
+  @UseGuards(new AuthGuard())
+  async deleteOrder(@GetUser() user) {
+    return await this.orderService.deleteOrder(user.id);
   }
 }
