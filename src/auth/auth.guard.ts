@@ -7,18 +7,17 @@ export class AuthGuard implements CanActivate {
     context: ExecutionContext,
   ): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    if(!request.headers.authorization) {
+    if(!request.headers['access-token']) {
       return false;
     }
-    request.user = await this.validateToken(request.headers.authorization);
+    request.user = await this.validateToken(request.headers['access-token']);
     return true;
   }
 
-  async validateToken(auth: string) {
-    if(auth.split(' ')[0] !== 'Bearer') {
+  async validateToken(token: string) {
+    if(!token) {
       throw new HttpException('Invalid token', HttpStatus.FORBIDDEN);
     }
-    const token = auth.split(' ')[1];
     try {
       const decoded = await jwt.verify(token, 'hoahongden');
       return decoded;
