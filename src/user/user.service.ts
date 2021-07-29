@@ -2,10 +2,10 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './user.model';
-import { CreateUserDto, UserLoginDto } from './dto/create-user.dto';
+import { CreateUserDto, UpdateRoleDto, UserLoginDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { Payload } from 'src/dto-config/dtoConfig';
+import { PayloadDto} from 'src/dto-config/dtoConfig';
 
 @Injectable()
 export class UserService {
@@ -32,11 +32,17 @@ export class UserService {
     if (!user || !bcrypt.compareSync(password, user.password)) {
       throw new HttpException('Invalid username or password', HttpStatus.UNAUTHORIZED)
     }
-    const payload: Payload = {
+    const payload: PayloadDto = {
       id: user._id,
       role: user.role,
     }
     const jwt = await this.jwtService.signAsync(payload);
     return {token: jwt};
+  }
+
+  async updateRole(confirmId: string, updateRoleDto: UpdateRoleDto): Promise<any> {
+    const { role } = updateRoleDto;
+    await this.userModel.updateOne({_id: confirmId}, {role: role});
+    return { message: 'Update role successful'}
   }
 }
