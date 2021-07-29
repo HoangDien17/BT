@@ -3,6 +3,7 @@ import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './exception/exception.filter';
+require('dotenv').config({ path: `../${process.env.NODE_ENV}.env` });
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

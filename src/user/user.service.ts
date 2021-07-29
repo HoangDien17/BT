@@ -5,6 +5,7 @@ import { User } from './user.model';
 import { CreateUserDto, UserLoginDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { Payload } from 'src/dto-config/dtoConfig';
 
 @Injectable()
 export class UserService {
@@ -31,7 +32,11 @@ export class UserService {
     if (!user || !bcrypt.compareSync(password, user.password)) {
       throw new HttpException('Invalid username or password', HttpStatus.UNAUTHORIZED)
     }
-    const jwt = await this.jwtService.signAsync({ id: user._id });
+    const payload: Payload = {
+      id: user._id,
+      role: user.role,
+    }
+    const jwt = await this.jwtService.signAsync(payload);
     return {token: jwt};
   }
 }
