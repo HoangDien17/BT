@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsAlphanumeric, Length } from "class-validator";
+import { IsAlphanumeric, IsEnum, IsString, Length } from "class-validator";
 
 export class CreateUserDto {
   @ApiProperty({description: 'User is numberic and {3, 8} characters'})
@@ -23,3 +23,15 @@ export class UserLoginDto {
   @IsAlphanumeric()
   password: string;
 }
+
+export enum Role {
+  Admin = 'admin',
+  Custom = 'custom'
+}
+export class UpdateRoleDto {
+  @ApiProperty()
+  @IsEnum(Role)
+  role: Role
+}
+
+
