@@ -11,6 +11,7 @@ export class AuthGuard implements CanActivate {
       return false;
     }
     request.user = await this.validateToken(request.headers['access-token']);
+    console.log(request.user)
     return true;
   }
 
