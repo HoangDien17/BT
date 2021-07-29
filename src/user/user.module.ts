@@ -11,7 +11,7 @@ import { RolesGuard } from 'src/auth/role.guard';
   imports: [
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     JwtModule.register({
-      secret: 'hoahongden',
+      secret: process.env.SECRET_KEY,
       signOptions: { expiresIn: '5m' },
     }),
   ],

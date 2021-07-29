@@ -1,11 +1,14 @@
 import { ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
 import { AppModule } from './app.module';
+import { envLoader } from './env.loader';
 import { HttpExceptionFilter } from './exception/exception.filter';
-require('dotenv').config({ path: `../${process.env.NODE_ENV}.env` });
+
 
 async function bootstrap() {
+  await envLoader()
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
@@ -22,6 +25,6 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(process.env.PORT);
 }
 bootstrap();
