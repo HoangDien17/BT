@@ -1,11 +1,11 @@
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { Transport } from '@nestjs/microservices';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
 import { envLoader } from './env.loader';
 import { HttpExceptionFilter } from './exception/exception.filter';
-
 
 async function bootstrap() {
   await envLoader()
@@ -28,3 +28,4 @@ async function bootstrap() {
   await app.listen(process.env.PORT);
 }
 bootstrap();
+
