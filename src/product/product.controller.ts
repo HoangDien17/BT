@@ -45,6 +45,7 @@ export class ProductController {
   }
 
   @Roles('admin')
+  @ApiBearerAuth()
   @ApiOkResponse({description: 'Delete Product succesful'})
   @ApiNotFoundResponse({description: 'Product not found'})
   @Delete(':id')

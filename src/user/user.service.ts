@@ -36,19 +36,8 @@ export class UserService {
       id: user._id,
       role: user.role,
     }
-    console.log(payload)
-    console.log(process.env.SECRET_KEY)
-    console.log(this.jwtService);
-    try {
-      const jwt = await this.jwtService.signAsync(payload);
-      console.log('jwt', jwt)
-      return {token: jwt};
-    }
-    catch(error) {
-      console.log(error)
-    }
-    
-    
+    const jwt = await this.jwtService.signAsync(payload);
+    return {token: jwt};
   }
 
   async updateRole(confirmId: string, updateRoleDto: UpdateRoleDto): Promise<any> {

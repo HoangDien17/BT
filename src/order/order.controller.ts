@@ -4,7 +4,7 @@ import { Post } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiBadRequestResponse, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBearerAuth, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { GetUser } from 'src/decorators/user.decorator';
 import { OrderDto } from './dto/order';
@@ -19,16 +19,16 @@ export class OrderController {
     @Inject('ORDER_CLIENT') private readonly client: ClientProxy,
   ) {}
 
+  @ApiBearerAuth()
   @ApiOkResponse({description: 'Get order succesful'})
   @ApiBadRequestResponse({description: 'Bad request'})
   @Get()
   @UseGuards(new AuthGuard())
-  async getOrderByUser() {
-    const way = this.client.send('haha', 'VietNam')
-    return way
-    
+  async getOrderByUser(@GetUser() user) {
+    return await this.orderService.getOrderByUser(user.id);
   }
 
+  @ApiBearerAuth()
   @ApiCreatedResponse({description: 'Created order succesful'})
   @ApiBadRequestResponse({description: 'Bad request'})
   @Post()
@@ -37,6 +37,7 @@ export class OrderController {
     return await this.orderService.createOrder(user.id, orderDto);
   }
 
+  @ApiBearerAuth()
   @ApiOkResponse({description: 'Delete Product succesful'})
   @ApiNotFoundResponse({description: 'Product not found'})
   @Delete()
